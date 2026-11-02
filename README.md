@@ -40,6 +40,12 @@ Sell any product in quantity packs with per-pack discounts. Shoppers pick a pack
 
 ## Screenshots
 
+### Storefront
+
+![Packs on the product page](screenshots/product-packs-classic.png)
+
+**Classic cards** live on a product page: pick a pack, see the savings, add to cart.
+
 ### Layouts
 
 | | |
