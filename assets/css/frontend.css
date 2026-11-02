@@ -1,0 +1,625 @@
+/* BundleKit – Buy in Packs — frontend (1.5.0).
+ * Schema-driven styling: EVERY color and spacing below reads a
+ * --bk-* CSS variable printed on the widget wrapper by
+ * BundleKit_Buy_In_Packs_Frontend::style_attr(). There are no
+ * hardcoded colors or spacing values and no var() fallbacks — the
+ * schema gives every control a default, so every variable is always
+ * present (unchecked show/hide toggles output "none").
+ * Structural geometry (flex/grid/position, 50% circles, 0, 100%)
+ * stays in the stylesheet; it is not a styling choice. */
+
+/* ---- form layout when the widget is present ----
+ * Two mechanisms: the :has() rules below (no-JS fallback) and the
+ * .bkp-has-packs class added by frontend.js (works in every browser).
+ * The form becomes a single-column GRID — packs, then the Add to cart
+ * button, each full width — so theme row rules can no longer squeeze
+ * the widget beside the buttons, on simple AND variable products. */
+form.cart:has(.bundlekit-packs),
+.bkp-has-packs {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) !important;
+	gap: 12px !important;
+	align-items: start !important;
+	max-width: 100%;
+}
+form.cart:has(.bundlekit-packs) > *,
+.bkp-has-packs > * {
+	min-width: 0;
+	max-width: 100%;
+}
+/* Hide the theme's own quantity counter — the packs ARE the quantity. */
+form.cart:has(.bundlekit-packs) .quantity,
+.bkp-has-packs .quantity {
+	display: none !important;
+}
+form.cart:has(.bundlekit-packs) > .single_add_to_cart_button,
+form.cart:has(.bundlekit-packs) .woocommerce-variation-add-to-cart > .single_add_to_cart_button,
+form.cart:has(.bundlekit-packs) button[type="submit"].single_add_to_cart_button,
+.bkp-has-packs > .single_add_to_cart_button,
+.bkp-has-packs .woocommerce-variation-add-to-cart > .single_add_to_cart_button,
+.bkp-has-packs button[type="submit"].single_add_to_cart_button {
+	width: 100%;
+	justify-content: center;
+}
+
+/* ---- widget ---- */
+.bundlekit-packs {
+	width: 100%;
+	max-width: 100%;
+	max-width: var(--bk-widget-max-width);
+	box-sizing: border-box;
+	margin-top: var(--bk-margin-top);
+	margin-bottom: var(--bk-margin-bottom);
+	background: var(--bk-widget-bg);
+	border: var(--bk-widget-border-width) var(--bk-widget-border-style) var(--bk-widget-border-color);
+	border-radius: var(--bk-widget-radius);
+	box-shadow: var(--bk-widget-shadow);
+	padding: var(--bk-widget-pad-top) var(--bk-widget-pad-right) var(--bk-widget-pad-bottom) var(--bk-widget-pad-left);
+	font-family: var(--bk-base-font);
+}
+.bundlekit-packs.bk-align-center {
+	margin-left: auto;
+	margin-right: auto;
+}
+.bundlekit-packs.bk-align-right {
+	margin-left: auto;
+}
+
+/* Heading with lines on both sides, like the reference design. */
+.bundlekit-packs-title {
+	display: flex;
+	align-items: center;
+	gap: var(--bk-divider-gap);
+	margin: 0 0 var(--bk-title-margin-bottom);
+	font-size: var(--bk-title-size);
+	font-weight: var(--bk-title-weight);
+	font-family: var(--bk-title-font);
+	line-height: var(--bk-title-line-height);
+	letter-spacing: var(--bk-title-letter-spacing);
+	text-transform: var(--bk-title-transform);
+	color: var(--bk-title-color);
+	text-align: var(--bk-title-align);
+}
+.bundlekit-packs-title::before,
+.bundlekit-packs-title::after {
+	content: "";
+	flex: 1;
+	display: block;
+	height: 0;
+	border-top: var(--bk-divider-thickness) var(--bk-divider-style) var(--bk-divider-color);
+	min-width: var(--bk-divider-gap);
+}
+.bundlekit-packs-title span {
+	white-space: nowrap;
+}
+
+.bundlekit-packs-list {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--bk-gap);
+}
+
+/* ---- variant selectors moved inside the box (variable products) ---- */
+.bundlekit-packs-variations {
+	width: 100%;
+	margin: 0 0 4px !important;
+}
+.bundlekit-packs-variations select {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+.bundlekit-packs-variations .label label {
+	font-weight: 600;
+}
+
+/* ---- pack card ---- */
+.bundlekit-pack-card {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--bk-gap);
+	width: 100%;
+	box-sizing: border-box;
+	background: var(--bk-card-bg);
+	border: var(--bk-card-border-width) var(--bk-card-border-style) var(--bk-card-border);
+	border-radius: var(--bk-card-radius);
+	padding: var(--bk-card-padding);
+	padding-top: var(--bk-card-pad-top);
+	padding-right: var(--bk-card-pad-right);
+	padding-bottom: var(--bk-card-pad-bottom);
+	padding-left: var(--bk-card-pad-left);
+	cursor: pointer;
+	margin: 0;
+	box-shadow: var(--bk-card-shadow);
+	transition: border-color var(--bk-transition-speed) ease, background var(--bk-transition-speed) ease, box-shadow var(--bk-transition-speed) ease;
+}
+.bundlekit-pack-card:hover {
+	background: var(--bk-card-bg-hover);
+	border-color: var(--bk-card-border-hover);
+}
+.bundlekit-pack-card.is-selected {
+	border-color: var(--bk-selected-border);
+	border-width: var(--bk-selected-border-width);
+	background: var(--bk-selected-bg);
+	box-shadow: var(--bk-selected-shadow);
+	color: var(--bk-selected-color);
+}
+
+/* Custom radio: a plain circle, filled when selected. */
+.bundlekit-pack-radio {
+	appearance: none;
+	-webkit-appearance: none;
+	flex-shrink: 0;
+	width: var(--bk-radio-size);
+	height: var(--bk-radio-size);
+	border: 2px solid var(--bk-radio-border);
+	border-radius: 50%;
+	margin: 0;
+	margin-right: var(--bk-radio-spacing);
+	padding: 0;
+	background: var(--bk-card-bg);
+	cursor: pointer;
+	position: relative;
+}
+.bundlekit-pack-card.is-selected .bundlekit-pack-radio {
+	border-color: var(--bk-radio-color);
+}
+.bundlekit-pack-card.is-selected .bundlekit-pack-radio::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: var(--bk-radio-dot);
+	height: var(--bk-radio-dot);
+	border-radius: 50%;
+	background: var(--bk-radio-color);
+}
+
+.bundlekit-pack-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--bk-price-spacing);
+}
+.bundlekit-pack-name {
+	font-size: var(--bk-label-size);
+	font-weight: var(--bk-label-weight);
+	line-height: var(--bk-label-line-height);
+	letter-spacing: var(--bk-label-letter-spacing);
+	color: var(--bk-label-color);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--bk-price-spacing);
+	flex-wrap: wrap;
+}
+.bundlekit-pack-card.is-selected .bundlekit-pack-name {
+	color: var(--bk-label-color-selected);
+}
+.bundlekit-pack-card.is-selected .bkp-col-desc,
+.bundlekit-pack-card.is-selected .bkp-custom-sub {
+	color: var(--bk-desc-color-selected);
+}
+.bundlekit-pack-save-badge {
+	display: inline-block;
+	background: var(--bk-save-pill-bg);
+	color: var(--bk-save-pill-color);
+	font-size: var(--bk-save-pill-size);
+	font-weight: var(--bk-save-pill-weight);
+	padding: var(--bk-save-pill-padding);
+	border-radius: var(--bk-save-pill-radius);
+	white-space: nowrap;
+}
+.bundlekit-pack-savepct {
+	font-size: var(--bk-save-size);
+	color: var(--bk-save-color);
+	margin-top: var(--bk-price-spacing);
+}
+.bundlekit-pack-prices {
+	flex-shrink: 0;
+	text-align: var(--bk-price-align);
+	display: flex;
+	align-items: baseline;
+	gap: var(--bk-price-spacing);
+}
+.bundlekit-pack-total {
+	font-size: var(--bk-price-size);
+	font-weight: var(--bk-price-weight);
+	color: var(--bk-price-color);
+	white-space: nowrap;
+}
+.bundlekit-pack-card.is-selected .bundlekit-pack-total {
+	color: var(--bk-price-color-selected);
+}
+.bundlekit-pack-regular {
+	font-size: var(--bk-regular-size);
+	font-weight: var(--bk-regular-weight);
+	color: var(--bk-regular-color);
+	text-decoration-color: var(--bk-strike-color);
+	white-space: nowrap;
+}
+
+/* "Most Popular" badge overlapping the card's top-right edge. */
+.bundlekit-pack-popular {
+	position: absolute;
+	top: var(--bk-popular-offset-top);
+	right: var(--bk-popular-offset-right);
+	background: var(--bk-popular-bg);
+	color: var(--bk-popular-color);
+	font-size: var(--bk-popular-size);
+	font-weight: var(--bk-popular-weight);
+	text-transform: var(--bk-popular-transform);
+	padding: var(--bk-popular-padding);
+	border-radius: var(--bk-popular-radius);
+	white-space: nowrap;
+}
+.bundlekit-packs.bk-popular-inline .bundlekit-pack-popular {
+	position: static;
+}
+.bundlekit-pack-popular-star {
+	color: var(--bk-popular-star-color);
+}
+
+/* ---- custom pack row (reference style) ----
+ * icon + name/subtitle, variant slot, hardened counter, live price.
+ * The radio is visually hidden; the whole row selects the pack. */
+.bundlekit-pack-custom {
+	align-items: center;
+	flex-wrap: wrap;
+	row-gap: var(--bk-gap);
+}
+.bkp-sr-only {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0 0 0 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+.bkp-custom-icon {
+	display: inline-flex;
+	flex-shrink: 0;
+	width: var(--bk-stepper-icon-size);
+	height: var(--bk-stepper-icon-size);
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--bk-stepper-icon-border);
+	border-radius: var(--bk-stepper-icon-radius);
+	color: var(--bk-stepper-icon-color);
+	background: var(--bk-stepper-icon-bg);
+}
+.bkp-custom-text {
+	flex: 1;
+	min-width: 140px;
+	display: flex;
+	flex-direction: column;
+	gap: var(--bk-price-spacing);
+}
+.bkp-custom-text .bundlekit-pack-name {
+	font-size: var(--bk-stepper-title-size);
+	color: var(--bk-stepper-title-color);
+}
+.bkp-custom-sub {
+	font-size: var(--bk-stepper-sub-size);
+	color: var(--bk-stepper-sub-color);
+}
+/* Variant selectors moved into the custom row (variable products). */
+.bundlekit-pack-variant-slot:empty {
+	display: none;
+}
+.bundlekit-pack-variant-slot {
+	min-width: 0;
+}
+.bundlekit-pack-variant-slot .variations,
+.bundlekit-pack-variant-slot .variations tbody,
+.bundlekit-pack-variant-slot .variations tr {
+	display: block !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	background: none !important;
+}
+.bundlekit-pack-variant-slot .variations td {
+	display: block !important;
+	padding: 0 !important;
+	border: 0 !important;
+	background: none !important;
+}
+.bundlekit-pack-variant-slot .variations td.label {
+	display: none !important;
+}
+.bundlekit-pack-variant-slot .variations select {
+	appearance: none;
+	-webkit-appearance: none;
+	border: 1px solid var(--bk-counter-border) !important;
+	border-radius: var(--bk-counter-radius) !important;
+	background-color: var(--bk-card-bg) !important;
+	padding: var(--bk-price-spacing) var(--bk-gap) var(--bk-price-spacing) var(--bk-price-spacing) !important;
+	font-size: var(--bk-stepper-sub-size) !important;
+	max-width: 100%;
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+	background-repeat: no-repeat !important;
+	background-position: right 10px center !important;
+	cursor: pointer;
+}
+
+/* ---- custom pack counter: theme-proof ----
+ * Elementor and some themes restyle buttons/inputs inside product
+ * forms and broke the - [n] + counter, so every sizing rule here is
+ * !important and the counter is a strict non-wrapping inline-flex. */
+.bundlekit-pack-counter {
+	display: inline-flex !important;
+	flex-direction: row !important;
+	flex-wrap: nowrap !important;
+	align-items: stretch !important;
+	border: 1px solid var(--bk-counter-border) !important;
+	border-radius: var(--bk-counter-radius) !important;
+	overflow: hidden !important;
+	background: var(--bk-counter-bg) !important;
+	box-sizing: border-box !important;
+	max-width: 100%;
+	flex-shrink: 0;
+	height: var(--bk-counter-height) !important;
+}
+.bundlekit-pack-minus,
+.bundlekit-pack-plus {
+	flex: 0 0 var(--bk-counter-btn-size) !important;
+	width: var(--bk-counter-btn-size) !important;
+	min-width: var(--bk-counter-btn-size) !important;
+	max-width: var(--bk-counter-btn-size) !important;
+	height: var(--bk-counter-height) !important;
+	min-height: var(--bk-counter-height) !important;
+	max-height: var(--bk-counter-height) !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: var(--bk-counter-btn-bg) !important;
+	color: var(--bk-counter-btn-color) !important;
+	font-size: var(--bk-counter-qty-size) !important;
+	font-weight: 700 !important;
+	line-height: 1 !important;
+	cursor: pointer !important;
+	box-sizing: border-box !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	float: none !important;
+}
+.bundlekit-pack-minus:hover,
+.bundlekit-pack-plus:hover {
+	filter: brightness(0.95);
+}
+.bundlekit-pack-qty {
+	flex: 0 1 var(--bk-counter-qty-width) !important;
+	width: var(--bk-counter-qty-width) !important;
+	min-width: 0 !important;
+	height: var(--bk-counter-height) !important;
+	min-height: var(--bk-counter-height) !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	text-align: center !important;
+	font-size: var(--bk-counter-qty-size) !important;
+	font-weight: 600 !important;
+	box-sizing: border-box !important;
+	background: var(--bk-card-bg) !important;
+	color: var(--bk-counter-color) !important;
+	-moz-appearance: textfield !important;
+	appearance: textfield !important;
+	float: none !important;
+}
+.bundlekit-pack-qty::-webkit-outer-spin-button,
+.bundlekit-pack-qty::-webkit-inner-spin-button {
+	-webkit-appearance: none !important;
+	margin: 0 !important;
+}
+
+.bundlekit-packs-hint {
+	display: block;
+	margin: var(--bk-hint-margin-top) 0 0;
+	font-size: var(--bk-hint-size);
+	color: var(--bk-hint-color);
+	text-align: var(--bk-hint-align);
+}
+
+/* ---- Show/hide toggles: one hide rule per toggle.
+ * Driven by the Styling Controls checkboxes (display_classes()). ---- */
+.bundlekit-packs.bkp-no-title .bundlekit-packs-title,
+.bundlekit-packs.bkp-no-save-badge .bundlekit-pack-save-badge,
+.bundlekit-packs.bkp-no-save-percent .bundlekit-pack-savepct,
+.bundlekit-packs.bkp-no-regular .bundlekit-pack-regular,
+.bundlekit-packs.bkp-no-popular .bundlekit-pack-popular,
+.bundlekit-packs.bkp-no-custom .bundlekit-pack-custom,
+.bundlekit-packs.bkp-no-hint .bundlekit-packs-hint,
+.bundlekit-packs.bkp-no-desc .bkp-col-desc,
+.bundlekit-packs.bkp-no-desc .bkp-custom-sub,
+.bundlekit-packs.bkp-no-stepper-icon .bkp-custom-icon,
+.bundlekit-packs.bkp-no-radio .bundlekit-pack-radio,
+.bundlekit-packs.bkp-no-radio .bundlekit-pack-radio-fake,
+.bundlekit-packs.bkp-no-popular-star .bundlekit-pack-popular-star {
+	display: none !important;
+}
+.bundlekit-packs.bkp-no-divider .bundlekit-packs-title::before,
+.bundlekit-packs.bkp-no-divider .bundlekit-packs-title::after {
+	display: none !important;
+}
+
+/* ================================================================
+ * Widget layouts (BundleKit > Buy in Packs > Styling Controls).
+ * Every layout reuses the same pack-unit contract (.bundlekit-pack-card
+ * + data-* attributes + .bundlekit-pack-total etc.), so the one
+ * frontend.js paints and syncs all of them. Paint spans a layout does
+ * not show are hidden with !important (the JS sets inline display,
+ * which never beats !important).
+ * ================================================================ */
+
+/* ---- shared bits ---- */
+/* ---- layout: three column cards ---- */
+.bundlekit-packs--columns .bundlekit-packs-list.bkp-cols {
+	grid-template-columns: repeat(var(--bk-columns-desktop), minmax(0, 1fr));
+	gap: var(--bk-gap);
+}
+.bundlekit-packs--columns.bk-tablet .bundlekit-packs-list.bkp-cols {
+	grid-template-columns: repeat(var(--bk-columns-tablet), minmax(0, 1fr));
+}
+.bundlekit-packs--columns.bk-narrow .bundlekit-packs-list.bkp-cols {
+	grid-template-columns: repeat(var(--bk-columns-mobile), minmax(0, 1fr));
+}
+.bkp-col {
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--bk-price-spacing);
+	min-height: var(--bk-card-min-height);
+}
+.bkp-col-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: var(--bk-price-spacing);
+}
+.bkp-col .bkp-col-badge {
+	position: static;
+}
+.bkp-col-desc {
+	font-size: var(--bk-desc-size);
+	font-weight: var(--bk-desc-weight);
+	line-height: var(--bk-desc-line-height);
+	color: var(--bk-desc-color);
+}
+.bkp-col-prices {
+	margin-top: auto;
+	padding-top: var(--bk-price-spacing);
+	display: flex;
+	flex-direction: column;
+	gap: var(--bk-price-spacing);
+}
+/* The column design shows the badge pill + price only. */
+.bundlekit-packs--columns .bkp-col .bundlekit-pack-save-badge,
+.bundlekit-packs--columns .bkp-col .bundlekit-pack-savepct,
+.bundlekit-packs--columns .bkp-col .bundlekit-pack-regular {
+	display: none !important;
+}
+/* Custom pack as a column: icon, name, counter, price stacked. */
+.bundlekit-packs--columns .bundlekit-pack-custom.bkp-col {
+	align-items: flex-start;
+}
+.bundlekit-packs--columns .bundlekit-pack-custom.bkp-col .bkp-custom-text {
+	min-width: 0;
+}
+.bundlekit-packs--columns .bundlekit-pack-custom.bkp-col .bundlekit-pack-variant-slot {
+	width: 100%;
+}
+
+/* ---- layout: step-by-step builder ---- */
+.bkp-builder {
+	display: flex;
+	flex-direction: column;
+}
+.bkp-builder-custom {
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--bk-gap);
+	background: var(--bk-selected-bg);
+	border-color: var(--bk-selected-border);
+}
+.bkp-builder-custom-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--bk-gap);
+}
+.bkp-builder-custom-bottom {
+	display: flex;
+	align-items: center;
+	gap: var(--bk-gap);
+	flex-wrap: wrap;
+}
+.bkp-builder-custom .bundlekit-pack-counter {
+	transform: scale(1.15);
+	transform-origin: left center;
+}
+.bkp-or {
+	display: flex;
+	align-items: center;
+	gap: var(--bk-gap);
+	margin: var(--bk-gap) 0;
+	color: var(--bk-or-color);
+	font-size: var(--bk-save-size);
+	font-weight: var(--bk-save-pill-weight);
+}
+.bkp-or::before,
+.bkp-or::after {
+	content: "";
+	flex: 1;
+	height: 0;
+	border-top: 1px solid var(--bk-or-line-color);
+}
+.bkp-builder-tiers {
+	grid-template-columns: repeat(auto-fit, minmax(var(--bk-builder-tier-min), 1fr));
+}
+.bkp-builder-tier {
+	align-items: center;
+}
+.bkp-builder-tier-text {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--bk-price-spacing);
+}
+.bkp-builder-tier .bundlekit-pack-popular {
+	position: static;
+	align-self: flex-start;
+}
+.bkp-builder-tier .bundlekit-pack-regular,
+.bkp-builder-tier .bundlekit-pack-save-badge,
+.bkp-builder-tier .bundlekit-pack-savepct {
+	display: none !important;
+}
+.bkp-builder-total {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--bk-gap);
+	background: var(--bk-total-bg);
+	border: 1px solid var(--bk-total-border);
+	border-radius: var(--bk-total-radius);
+	padding: var(--bk-total-padding);
+	margin-top: var(--bk-gap);
+}
+.bkp-builder-total-label {
+	font-size: var(--bk-total-label-size);
+	font-weight: var(--bk-label-weight);
+	color: var(--bk-total-label-color);
+}
+.bkp-builder-total-right {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: var(--bk-price-spacing);
+}
+.bkp-builder-total-price {
+	font-size: var(--bk-total-price-size);
+	font-weight: var(--bk-price-weight);
+	color: var(--bk-total-price-color);
+}
+.bkp-builder-total-sub {
+	font-size: var(--bk-total-sub-size);
+	color: var(--bk-total-sub-color);
+}
+
+/* ---- narrow / tablet states (JS toggles .bk-narrow / .bk-tablet
+ * at fixed 640/900px widget widths) ---- */
+.bundlekit-packs.bk-narrow .bundlekit-pack-custom .bkp-custom-text {
+	flex: 1 1 calc(100% - 110px);
+}
+.bundlekit-packs.bk-narrow .bundlekit-pack-variant-slot {
+	flex: 1 1 100%;
+}

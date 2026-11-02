@@ -1,0 +1,101 @@
+/**
+ * BundleKit – Buy in Packs — product editor screen.
+ *
+ * Hides the per-product pack fields unless "Custom packs for this
+ * product" is picked as the pack source.
+ */
+.bkp-hidden {
+	display: none;
+}
+
+/**
+ * Styling Controls (1.5.0): schema-driven groups.
+ * Collapsible group cards use native <details>/<summary> — no JS
+ * needed for the collapsing itself.
+ */
+.bk-style-group {
+	padding: 0;
+	overflow: hidden;
+}
+.bk-style-summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 18px 20px;
+}
+.bk-style-summary::-webkit-details-marker {
+	display: none;
+}
+.bk-style-summary::after {
+	content: "\f140";
+	font-family: dashicons;
+	font-size: 20px;
+	color: #787c82;
+	margin-left: auto;
+	transition: transform 150ms ease;
+}
+.bk-style-group[open] > .bk-style-summary::after {
+	transform: rotate(180deg);
+}
+.bk-style-group > .bk-style-fields,
+.bk-style-group > .bk-actions,
+.bk-style-group > .bk-field-desc {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.bk-style-group > .bk-actions:last-child,
+.bk-style-group > .bk-field-desc:last-child {
+	padding-bottom: 20px;
+}
+.bk-style-fields {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	gap: 4px 24px;
+	padding-top: 4px;
+	padding-bottom: 20px;
+}
+.bk-style-field {
+	margin: 0;
+	padding: 10px 0;
+	border-top: 1px solid #f0f0f1;
+}
+.bk-style-field:first-child {
+	border-top: 0;
+}
+.bk-style-advanced {
+	grid-column: 1 / -1;
+	border: 1px dashed #dcdcde;
+	border-radius: 8px;
+	padding: 0 16px;
+	margin-top: 8px;
+	background: #fbfbfc;
+}
+.bk-style-advanced > summary {
+	cursor: pointer;
+	padding: 10px 0;
+	font-weight: 600;
+	color: #50575e;
+	list-style: none;
+}
+.bk-style-advanced > summary::-webkit-details-marker {
+	display: none;
+}
+.bk-style-advanced > summary::before {
+	content: "\f140";
+	font-family: dashicons;
+	vertical-align: text-bottom;
+	margin-right: 4px;
+}
+.bk-style-advanced[open] > summary::before {
+	content: "\f142";
+}
+.bk-style-advanced .bk-style-fields {
+	padding-bottom: 12px;
+}
+.bk-textarea {
+	width: 100%;
+	font-family: Consolas, Monaco, monospace;
+	font-size: 12px;
+}
